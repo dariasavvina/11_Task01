@@ -7,20 +7,26 @@ public class Main {
     static class LuckyThread extends Thread {
         @Override
         public void run() {
-            Work();
+            while (isWork()) 
+                if (Work())
+                    count++;
         }
     }
 
-    public synchronized static void Work(){
-        while (x < 999999) {
-            x++;
-            if ((x % 10) + (x / 10) % 10 + (x / 100) % 10 == (x / 1000)
-                    % 10 + (x / 10000) % 10 + (x / 100000) % 10) {
-                System.out.println(x);
-                count++;
-            }
+    public  synchronized static boolean Work(){
+        x++;
+        if ((x % 10) + (x / 10) % 10 + (x / 100) % 10 == (x / 1000)
+                % 10 + (x / 10000) % 10 + (x / 100000) % 10) {
+            System.out.println(x);
+            return true;
         }
+        return false;
     }
+
+    public synchronized static boolean isWork(){
+        return x < 999999;
+    }
+
 
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new LuckyThread();
